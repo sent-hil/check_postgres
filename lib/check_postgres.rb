@@ -7,7 +7,7 @@ class CheckPostgres
   end
 
   def dbstats
-    stats = send("dbstats")
+    stats = _send("dbstats")
     stats_by_db = stats.split(/\n/)
     stats_by_db.map do |st|
       {}.tap do |result|
@@ -21,7 +21,9 @@ class CheckPostgres
     end
   end
 
-  def send(action)
+  private
+
+  def _send(action)
     path = File.dirname(__FILE__)
     `#{path}/bin/check_postgres.pl -H #{host} -dbuser #{user} --action #{action}`
   end
