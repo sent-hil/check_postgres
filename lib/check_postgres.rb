@@ -1,3 +1,5 @@
+require_relative "./check_postgres/checks"
+
 class CheckPostgres
   attr_reader :host, :user
 
@@ -17,6 +19,23 @@ class CheckPostgres
         split_entries.each do |entry|
           result[entry[0]] = entry[1]
         end
+      end
+    end
+  end
+
+  def connections
+    backends = _send("backends")
+    counts = backends.split("|")[1].split(" ")
+    counts = counts[1..-1]
+
+    {}.tap do |result|
+      counts.map do |count|
+        entry = count.split("=")
+
+        key   = entry[0].to_sym
+        value = entry[1].split(";")[0]
+
+        result[key] = value.to_i
       end
     end
   end

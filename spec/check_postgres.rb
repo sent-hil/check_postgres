@@ -8,4 +8,8 @@ describe CheckPostgres do
   it "returns dbstats" do
     subject.dbstats.count.should == 4
   end
+
+  it "returns connections" do
+    subject.connections[:postgres].should == 1
+  end
 end
