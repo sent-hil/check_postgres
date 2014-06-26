@@ -12,4 +12,8 @@ describe CheckPostgres do
   it "returns connections" do
     subject.connections[:postgres].should == 1
   end
+
+  it "returns locks" do
+    subject.locks[:postgres].should == 1
+  end
 end

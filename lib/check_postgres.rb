@@ -25,7 +25,22 @@ class CheckPostgres
 
   def connections
     backends = _send("backends")
-    counts = backends.split("|")[1].split(" ")
+    result = parse_count(backends)
+
+    result
+  end
+
+  def locks
+    locks = _send("backends")
+    result = parse_count(locks)
+
+    result
+  end
+
+  private
+
+  def parse_count(result)
+    counts = result.split("|")[1].split(" ")
     counts = counts[1..-1]
 
     {}.tap do |result|
@@ -39,8 +54,6 @@ class CheckPostgres
       end
     end
   end
-
-  private
 
   def _send(action)
     path = File.dirname(__FILE__)
