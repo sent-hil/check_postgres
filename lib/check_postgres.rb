@@ -22,6 +22,7 @@ class CheckPostgres
   end
 
   def send(action)
-    `./bin/check_postgres.pl -H #{host} -dbuser #{user} --action #{action}`
+    path = File.dirname(__FILE__)
+    `#{path}/bin/check_postgres.pl -H #{host} -dbuser #{user} --action #{action}`
   end
 end
