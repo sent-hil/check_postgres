@@ -14,5 +14,5 @@ class CheckPostgres
     last_vacuum
   )
 
- CHECKS = ["dbstats", "locks"] && PER_DB_STATS && POSTGRES_DB_STATS
+ CHECKS = ["dbstats", "locks"] + PER_DB_STATS + POSTGRES_DB_STATS
 end
