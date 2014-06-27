@@ -6,14 +6,22 @@ describe CheckPostgres do
   end
 
   it "returns dbstats" do
-    subject.dbstats.count.should == 4
+    subject.dbstats.count.should be_a(Integer)
   end
 
   it "returns connections" do
-    subject.connections[:postgres].should == 1
+    subject.backends[:postgres].should be_a(Integer)
   end
 
   it "returns locks" do
-    subject.locks[:postgres].should == 1
+    subject.locks[:postgres].should be_a(Integer)
+  end
+
+  it "returns txn_wraparound" do
+    subject.txn_wraparound[:postgres].should be_a(Integer)
+  end
+
+  it "returns autovac_freeze" do
+    subject.autovac_freeze[:postgres].should be_a(Integer)
   end
 end

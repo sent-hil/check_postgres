@@ -23,18 +23,25 @@ class CheckPostgres
     end
   end
 
-  def connections
-    backends = _send("backends")
-    result = parse_count(backends)
+  def locks
+    raw = _send("locks")
+    result = parse_count(raw)
 
-    result
+    {}.tap do |final|
+      result.each do |dbname, count|
+        key = dbname.to_s.split(".")[0]
+        final[key.to_sym] = count
+      end
+    end
   end
 
-  def locks
-    locks = _send("backends")
-    result = parse_count(locks)
+  PER_DB_STATS.each do |check|
+    define_method check do
+      raw = _send(check)
+      result = parse_count(raw)
 
-    result
+      result
+    end
   end
 
   private
