@@ -18,4 +18,10 @@ describe CheckPostgres do
       subject.send(check)[:postgres].should be_a(Integer)
     end
   end
+
+  CheckPostgres::POSTGRES_DB_STATS.each do |check|
+    it "returns #{check}" do
+      subject.send(check).first[1].should be_a(Integer)
+    end
+  end
 end

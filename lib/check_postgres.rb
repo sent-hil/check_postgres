@@ -37,10 +37,23 @@ class CheckPostgres
 
   PER_DB_STATS.each do |check|
     define_method check do
-      raw = _send(check)
+      raw    = _send(check)
       result = parse_count(raw)
 
       result
+    end
+  end
+
+  POSTGRES_DB_STATS.each do |check|
+    define_method check do
+      raw    = _send(check)
+      result = parse_count(raw)
+
+      {}.tap do |final|
+        result.map do |x, y|
+          final[x.to_s.split(".")[2]] = y
+        end
+      end
     end
   end
 
