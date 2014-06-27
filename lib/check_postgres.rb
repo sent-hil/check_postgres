@@ -35,7 +35,7 @@ class CheckPostgres
     {}.tap do |final|
       result.each do |dbname, count|
         key = dbname.to_s.split(".")[0]
-        final[key.to_sym] = count
+        final[key.to_sym] = count.to_i
       end
     end
   end
@@ -43,8 +43,7 @@ class CheckPostgres
   PER_DB_STATS.each do |check|
     define_method check do
       raw    = _send(check)
-      result = parse_count(raw)
-      result.merge!("scope" => "db")
+      result = parse_integer_count(raw)
 
       result
     end
@@ -53,7 +52,7 @@ class CheckPostgres
   POSTGRES_DB_STATS.each do |check|
     define_method check do
       raw    = _send(check)
-      result = parse_count(raw)
+      result = parse_integer_count(raw)
       result.merge!("scope" => "postgres")
 
       {}.tap do |final|
@@ -66,6 +65,13 @@ class CheckPostgres
 
   private
 
+  def parse_integer_count(raw)
+    result = parse_count(raw)
+    result.each do |key, value|
+      result[key] = value.to_i
+    end
+  end
+
   def parse_count(result)
     counts = result.split("|")[1].split(" ")
     counts = counts[1..-1]
@@ -77,7 +83,7 @@ class CheckPostgres
         key   = entry[0].to_sym
         value = entry[1].split(";")[0]
 
-        result[key] = value.to_i
+        result[key] = value
       end
     end
   end
