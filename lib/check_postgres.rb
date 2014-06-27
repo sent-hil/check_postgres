@@ -17,7 +17,12 @@ class CheckPostgres
         split_entries = entries.map {|x| x.split(":")}
 
         split_entries.each do |entry|
-          result[entry[0]] = entry[1]
+          key, value = entry[0], entry[1]
+          unless key == "dbname"
+            value = value.to_i
+          end
+
+          result[key] = value
         end
       end
     end
