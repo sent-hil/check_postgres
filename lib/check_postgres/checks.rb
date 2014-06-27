@@ -3,6 +3,8 @@ class CheckPostgres
     backends
     txn_wraparound
     autovac_freeze
+    commitratio
+    hitratio
   )
 
  CHECKS = ["dbstats", "locks"] && PER_DB_STATS
