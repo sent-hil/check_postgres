@@ -39,6 +39,7 @@ class CheckPostgres
     define_method check do
       raw    = _send(check)
       result = parse_count(raw)
+      result.merge!("scope" => "db")
 
       result
     end
@@ -48,6 +49,7 @@ class CheckPostgres
     define_method check do
       raw    = _send(check)
       result = parse_count(raw)
+      result.merge!("scope" => "postgres")
 
       {}.tap do |final|
         result.map do |x, y|
